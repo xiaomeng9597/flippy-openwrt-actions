@@ -51,8 +51,9 @@ PACKAGE_SOC_VALUE="all"
 # Set the default packaged kernel download repository
 KERNEL_REPO_URL_VALUE="QXY716/Kernel"
 # Set kernel tag: kernel_stable, kernel_rk3588, kernel_rk35xx
-KERNEL_TAGS=("stable" "rk3588" "rk35xx")
+KERNEL_TAGS=("stable" "flippy" "rk3588" "rk35xx")
 STABLE_KERNEL=("6.1.y" "6.6.y" "5.15.y")
+FLIPPY_KERNEL=("6.1.y" "6.6.y" "5.15.y")
 RK3588_KERNEL=("5.10.y")
 RK35XX_KERNEL=("5.10.y")
 KERNEL_AUTO_LATEST_VALUE="true"
@@ -198,7 +199,7 @@ init_var() {
             elif [[ " ${PACKAGE_OPENWRT_RK35XX[@]} " =~ " ${kt} " ]]; then
                 KERNEL_TAGS_TMP+=("rk35xx")
             else
-                KERNEL_TAGS_TMP+=("stable")
+                KERNEL_TAGS_TMP+=("flippy")
             fi
         done
         # Remove duplicate kernel tags
@@ -210,12 +211,12 @@ init_var() {
     echo -e "${INFO} Kernel tags: [ $(echo ${KERNEL_TAGS[@]} | xargs) ]"
 
     # Reset STABLE_KERNEL options
-    [[ -n "${KERNEL_VERSION_NAME}" && " ${KERNEL_TAGS[@]} " =~ " stable " ]] && {
+    [[ -n "${KERNEL_VERSION_NAME}" && " ${KERNEL_TAGS[@]} " =~ " flippy " ]] && {
         oldIFS="${IFS}"
         IFS="_"
         STABLE_KERNEL=(${KERNEL_VERSION_NAME})
         IFS="${oldIFS}"
-        echo -e "${INFO} Stable kernel: [ $(echo ${STABLE_KERNEL[@]} | xargs) ]"
+        echo -e "${INFO} flippy kernel: [ $(echo ${STABLE_KERNEL[@]} | xargs) ]"
     }
 
     # Convert kernel library address to api format
@@ -328,7 +329,7 @@ query_kernel() {
                 echo -e "${INFO} The latest version of the rk35xx kernel: [ ${RK35XX_KERNEL[@]} ]"
             else
                 STABLE_KERNEL=(${TMP_ARR_KERNELS[@]})
-                echo -e "${INFO} The latest version of the stable kernel: [ ${STABLE_KERNEL[@]} ]"
+                echo -e "${INFO} The latest version of the flippy kernel: [ ${STABLE_KERNEL[@]} ]"
             fi
 
             let x++
@@ -421,7 +422,7 @@ make_openwrt() {
                 vb="rk35xx"
             else
                 build_kernel=(${STABLE_KERNEL[@]})
-                vb="stable"
+                vb="flippy"
             fi
 
             k="1"
