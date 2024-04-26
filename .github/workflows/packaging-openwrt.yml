@@ -22,6 +22,7 @@ on:
           - beikeyun
           - cm3
           - e25
+          - fine3399
           - ht2
           - h28k
           - h66k
@@ -33,6 +34,7 @@ on:
           - l1pro
           - photonicat
           - qemu
+          - r08
           - r66s
           - r68s
           - jp-tvbox
@@ -65,11 +67,12 @@ on:
       kernel_repo:
         description: "Set the kernel repository"
         required: false
-        default: "breakings/OpenWrt"
+        default: "QXY716/kernel"
         type: choice
         options:
           - breakings/OpenWrt
           - ophub/kernel
+          - QXY716/kernel
       auto_kernel:
         description: "Auto use the latest kernel"
         required: false
@@ -90,12 +93,12 @@ on:
       builder_name:
         description: "Set OpenWrt builder signature."
         required: false
-        default: "ophub"
+        default: "QXY716"
         type: choice
         options:
           - ophub
           - angel
-          - yourname
+          - QXY716
 
 env:
   TZ: America/New_York
@@ -154,28 +157,13 @@ jobs:
         working-directory: /builder
         if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
         run: |
-          armvirt_tarfile_repo="ophub/amlogic-s9xxx-openwrt"
           releases_tag_keywords="OpenWrt_lede"
 
           armvirt_tarfile_path="openwrt/bin/targets/armvirt/64"
           [[ -d "${armvirt_tarfile_path}" ]] || mkdir -p ${armvirt_tarfile_path}
           ln -sf /builder/openwrt ${GITHUB_WORKSPACE}/openwrt
 
-          latest_version="$(curl -s \
-                              -H "Accept: application/vnd.github+json" \
-                              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                              https://api.github.com/repos/${armvirt_tarfile_repo}/releases?per_page=100 |
-                              jq '.[]' |
-                              jq -s --arg RTK "${releases_tag_keywords}" '.[] | select(.tag_name | contains($RTK))' |
-                              jq -s '.[].assets[] | {data:.updated_at, url:.browser_download_url}' |
-                              jq -s --arg BOARD "-rootfs.tar.gz" '.[] | select(.url | endswith($BOARD))' |
-                              jq -s 'sort_by(.data)|reverse[]' |
-                              jq -s '.[0]' -c
-                          )"
-
-          [[ "${latest_version}" == "null" ]] && echo "Invalid OpenWrt rootfs download address." && exit 1
-          latest_updated_at="$(echo ${latest_version} | jq -r '.data')"
-          latest_url="$(echo ${latest_version} | jq -r '.url')"
+          latest_url="https://github.com/breakings/OpenWrt/releases/download/openwrt_armvirt/openwrt-armvirt-64-generic-rootfs.tar.gz"
 
           openwrt_filename="${latest_url##*/}"
           curl -fsSL "${latest_url}" -o "${armvirt_tarfile_path}/${openwrt_filename}"
@@ -188,14 +176,14 @@ jobs:
         working-directory: /builder
         if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
         run: |
-          SCRIPT_REPO_URL="https://github.com/unifreq/openwrt_packit"
+          SCRIPT_REPO_URL="https://github.com/QXY716/openwrt_packit"
           SCRIPT_REPO_BRANCH="master"
           SELECT_PACKITPATH="openwrt_packit"
           git clone -q --single-branch --depth=1 --branch=${SCRIPT_REPO_BRANCH} ${SCRIPT_REPO_URL} ${SELECT_PACKITPATH}
           ln -sf /builder/${SELECT_PACKITPATH} /opt/${SELECT_PACKITPATH}
 
       - name: Package OpenWrt Firmware
-        uses: ophub/flippy-openwrt-actions@main
+        uses: QXY716/flippy-openwrt-actions@main
         if: ${{ steps.download.outputs.status }} == 'success' && !cancelled()
         env:
           OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*rootfs.tar.gz
