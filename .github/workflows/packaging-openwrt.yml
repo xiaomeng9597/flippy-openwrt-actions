@@ -157,7 +157,7 @@ jobs:
         working-directory: /builder
         if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
         run: |
-          releases_tag_keywords="OpenWrt_lede"
+          releases_tag_keywords="OpenWrt_Flippy"
 
           armvirt_tarfile_path="openwrt/bin/targets/armvirt/64"
           [[ -d "${armvirt_tarfile_path}" ]] || mkdir -p ${armvirt_tarfile_path}

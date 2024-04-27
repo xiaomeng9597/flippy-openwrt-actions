@@ -461,7 +461,7 @@ make_openwrt() {
                     [[ "${SW_FLOWOFFLOAD}" -eq "1" ]] && SFE_FLOW="0"
 
                     if [[ -n "${OPENWRT_VER}" && "${OPENWRT_VER}" == "auto" ]]; then
-                        OPENWRT_VER="$(cat make.env | grep "OPENWRT_VER=\"" | cut -d '"' -f2)"
+                        OPENWRT_VER="$(cat whoami | grep "OPENWRT_VER=\"" | cut -d '"' -f2)"
                         echo -e "${INFO} (${i}.${k}) OPENWRT_VER: [ ${OPENWRT_VER} ]"
                     fi
 
