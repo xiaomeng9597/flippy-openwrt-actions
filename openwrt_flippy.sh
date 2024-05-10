@@ -54,7 +54,6 @@ KERNEL_REPO_URL_VALUE="QXY716/Kernel"
 KERNEL_TAGS=("stable" "flippy" "rk3588" "rk35xx")
 STABLE_KERNEL=("6.1.y" "6.6.y" "5.15.y")
 FLIPPY_KERNEL=("6.1.y" "6.6.y" "5.15.y")
-RK3588_KERNEL=("5.10.y")
 RK35XX_KERNEL=("5.10.y")
 KERNEL_AUTO_LATEST_VALUE="true"
 
