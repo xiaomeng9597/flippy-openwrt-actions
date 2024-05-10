@@ -16,7 +16,7 @@ on:
         default: "all"
         type: choice
         options:
-          - all
+          - 全部
           - s922x_s905x3_s905x2_s912_s905d_s905
           - ak88
           - beikeyun
@@ -62,7 +62,6 @@ on:
           - 6.1.y
           - 6.6.y
           - 6.1.y_6.6.y
-          - 5.15.y_5.10.y
       kernel_repo:
         description: "Set the kernel repository"
         required: false
