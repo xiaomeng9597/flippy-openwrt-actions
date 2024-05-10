@@ -16,7 +16,7 @@ on:
         default: "all"
         type: choice
         options:
-          - 全部
+          - all
           - s922x_s905x3_s905x2_s912_s905d_s905
           - ak88
           - beikeyun
@@ -99,7 +99,8 @@ on:
           - QXY716
 
 env:
-  TZ: America/New_York
+  TZ: Asia/Shanghai
+  GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
 jobs:
   build:
